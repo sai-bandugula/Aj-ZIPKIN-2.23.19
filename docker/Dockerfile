@@ -46,9 +46,11 @@ ENV RELEASE_FROM_MAVEN_BUILD=$release_from_maven_build
 ARG version=master
 ENV VERSION=$version
 ENV MAVEN_PROJECT_BASEDIR=/code
-RUN chown jenkins:jenkins -R /code/build-bin/maven/maven_build_or_unjar io.zipkin zipkin-server ${VERSION} exec && \
+RUN  ["chmod", "+x", "/code/build-bin/maven/maven_build_or_unjar"]
+RUN   ["chmod", "+x", "/code/build-bin/maven/maven_unjar"]
+RUN /code/build-bin/maven/maven_build_or_unjar io.zipkin zipkin-server ${VERSION} exec && \
     mv zipkin-server zipkin && \
-    chown jenkins:jenkins -R /code/build-bin/maven/maven_build_or_unjar io.zipkin zipkin-server ${VERSION} slim && \
+    /code/build-bin/maven/maven_build_or_unjar io.zipkin zipkin-server ${VERSION} slim && \
     mv zipkin-server zipkin-slim
 
 # Almost everything is common between the slim and normal build
